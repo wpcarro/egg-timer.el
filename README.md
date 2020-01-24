@@ -2,6 +2,9 @@
 
 Use Emacs and [ivy][1] to schedule alarms.
 
+![schedule an alarm using Emacs][4]
+![use the system's notification system to display the alarm][5]
+
 ## Dependencies
 - `ivy.el`
 
@@ -42,3 +45,5 @@ For more information:
 [1]: https://github.com/abo-abo/swiper#ivy
 [2]: https://github.com/abo-abo/swiper#installation
 [3]: https://github.com/melpa/melpa
+[4]: ./screenshots/emacs-screenshot.png
+[5]: ./screenshots/alert-screenshot.png
