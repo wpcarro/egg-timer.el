@@ -1,8 +1,8 @@
-;;; alarm.el --- Commonly used intervals for setting alarms while working -*- lexical-binding: t -*-
+;;; egg-timer.el --- Commonly used intervals for setting timers while working -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.1") (ivy "0.13.0"))
+;; Package-Requires: ((emacs "24.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -29,26 +29,20 @@
 ;; SOFTWARE.
 
 ;;; Commentary:
-;; Select common timer intervals with ivy and use `notifications-notify' to
-;; display a message when the timer completes.
+;; Select common timer intervals and use `notifications-notify' to display a
+;; message when the timer completes.
 
 ;;; Code:
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Dependencies
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'ivy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgroup alarm nil
-  "Schedule alarms to focus on a task."
+(defgroup egg-timer nil
+  "Use timers to help focus on a task."
   :group 'emacs)
 
-(defcustom alarm-intervals
+(defcustom egg-timer-intervals
   '(("1 minute" . 1)
     ("2 minutes" . 2)
     ("3 minutes" . 3)
@@ -63,23 +57,21 @@
     ("2 hours" . 120))
   "Commonly used intervals for timer amounts in minutes."
   :type '(alist :key-type string :value-type integer)
-  :group 'alarm)
+  :group 'egg-timer)
 
-(defun alarm-ivy-schedule ()
-  "Use ivy to select and schedule an alarm for a given set of time intervals."
+(defun egg-timer-schedule ()
+  "Select and schedule a timer for a given set of time intervals."
   (interactive)
-  (let ((ivy-sort-functions-alist nil))
-    (ivy-read "Set timer for: "
-              alarm-intervals
-              :action (lambda (cell)
-                        (run-at-time
-                         (format "%s minutes" (cdr cell))
-                         nil
-                         (lambda ()
-                           (notifications-notify
-                            :title "productivity.el"
-                            :body (format "%s timer complete." (car cell)))))
-                        (message (format "%s timer scheduled." (car cell)))))))
+  (let* ((key (completing-read "Set timer for: " egg-timer-intervals))
+         (val (alist-get key egg-timer-intervals nil nil #'string=)))
+    (run-at-time
+     (format "%s minutes" val)
+     nil
+     (lambda ()
+       (notifications-notify
+        :title "egg-timer.el"
+        :body (format "%s timer complete." key))))
+    (message (format "%s timer scheduled." key))))
 
-(provide 'alarm)
-;;; alarm.el ends here
+(provide 'egg-timer)
+;;; egg-timer.el ends here
