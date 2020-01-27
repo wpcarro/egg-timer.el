@@ -3,7 +3,7 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; URL: https://github.com/wpcarro/egg-timer.el
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.1"))
+;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
