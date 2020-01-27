@@ -72,7 +72,7 @@
        (notifications-notify
         :title "egg-timer.el"
         :body (format "%s timer complete." key))))
-    (message (format "%s timer scheduled." key))))
+    (message "%s timer scheduled." key)))
 
 (provide 'egg-timer)
 ;;; egg-timer.el ends here
