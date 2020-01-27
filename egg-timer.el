@@ -1,6 +1,7 @@
 ;;; egg-timer.el --- Commonly used intervals for setting timers while working -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; URL: https://github.com/wpcarro/egg-timer.el
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.1"))
 
