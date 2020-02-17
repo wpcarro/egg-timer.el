@@ -33,6 +33,13 @@ timer for 3 hours:
 (setq egg-timer-intervals (add-to-list 'egg-timer-intervals '("3 hour" . 180)))
 ```
 
+If you'd like to create a keybinding to immediately schedule an alarm instead of
+being prompted for a list of options, use `egg-timer-do-schedule`:
+
+```elisp
+(global-set-key (kbd "C-s-a") (lambda () (interactive) (egg-timer-do-schedule 2)))
+```
+
 For more information:
 - See the module documentation in `egg-timer.el`.
 

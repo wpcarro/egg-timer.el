@@ -60,19 +60,27 @@
   :type '(alist :key-type string :value-type integer)
   :group 'egg-timer)
 
+(defun egg-timer-do-schedule (minutes &optional label)
+  "Schedule a timer to go off in MINUTES.
+Provide LABEL to change the notifications, which defaults to \"MINUTES
+minutes\"."
+  (interactive)
+  (unless label (setq label (format "%s minutes" minutes)))
+  (run-at-time
+   (format "%s minutes" minutes)
+   nil
+   (lambda ()
+     (notifications-notify
+      :title "egg-timer.el"
+      :body (format "%s timer complete." label))))
+  (message "%s timer scheduled." label))
+
 (defun egg-timer-schedule ()
   "Select and schedule a timer for a given set of time intervals."
   (interactive)
   (let* ((key (completing-read "Set timer for: " egg-timer-intervals))
          (val (alist-get key egg-timer-intervals nil nil #'string=)))
-    (run-at-time
-     (format "%s minutes" val)
-     nil
-     (lambda ()
-       (notifications-notify
-        :title "egg-timer.el"
-        :body (format "%s timer complete." key))))
-    (message "%s timer scheduled." key)))
+    (egg-timer-do-schedule val key)))
 
 (provide 'egg-timer)
 ;;; egg-timer.el ends here
