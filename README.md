@@ -43,6 +43,25 @@ being prompted for a list of options, use `egg-timer-do-schedule`:
 For more information:
 - See the module documentation in `egg-timer.el`.
 
+## Alternatives to egg-timer.el
+
+[Many timer packages][melpa-timers] exist, so what's different about
+`egg-timer`? Many of the timers on MELPA are [pomodoro
+timers][wtf-pomodoro]. `egg-timer` is not exclusively a pomodoro timer --
+although you could use `egg-timer-do-schedule` to create one if you'd
+like.
+
+`egg-timer` prompts users using Emacs's built-in `completing-read` function;
+this integrates with [ivy][wtf-ivy] or other completion libraries that users may
+prefer. `egg-timer` also notifies users with `notifications-notify`, which
+integrates with the FreeDesktop notification protocol, notifying users at the
+operating system level.
+
+Enjoy responsibly.
+
 [1]: ./screenshots/emacs-screenshot.png
 [2]: ./screenshots/alert-screenshot.png
 [3]: https://github.com/melpa/melpa
+[melpa-timers]: https://melpa.org/#/?q=timer
+[wtf-pomodoro]: https://en.wikipedia.org/wiki/Pomodoro_Technique
+[wtf-ivy]: https://github.com/abo-abo/swiper#ivy
