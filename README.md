@@ -1,5 +1,6 @@
 # egg-timer.el
 
+[![MELPA](https://melpa.org/packages/egg-timer-badge.svg)](https://melpa.org/#/egg-timer)
 Use Emacs to set timers.
 
 ![schedule an alarm using Emacs][1]
@@ -7,13 +8,11 @@ Use Emacs to set timers.
 
 ## Installation
 
-`egg-timer` will be available on [MELPA][3] soon. In the meantime, you can
-download `egg-timer.el` and ensure that it's available on your `load-path` so
-that you can call:
+`egg-timer` is available on [MELPA](https://github.com/melpa/melpa). To install
+you may need to run:
 
-```elisp
-(require 'egg-timer)
-```
+- `M-x` `package-refresh-contents`
+- `M-x` `package-install` `egg-timer`
 
 ## Configuration
 
