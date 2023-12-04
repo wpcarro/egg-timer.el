@@ -9,7 +9,7 @@ But the users experience of it should remain very simple.
 
 This version exposes four functions to the user:
 
-* `egg-timer-schedule` lets you schedule a timer either from a completing read or entering any time string that looks right enough according to `timer-duration-words` so writing "3 seconds" or "3 hours" would give you a timer for "3 second" or "3 hour" because it trims off -s and things.
+* `egg-timer-schedule` lets you schedule a timer either from a completing read or entering any time string that looks right enough according to `timer-duration-words` so writing "3 seconds" or "3 hours" would give you a timer for "3 second" or "3 hour" because it trims off -s and things.  If there is any text after the second word this is appended to the label of your timer as a reason for its existence, so "25 minutes turn down oven" would let you know why you got a notification at that point with the context.
 * `egg-timer-p` tells you if you have running timers
 * `egg-timer-list` lists your running timers
 * `egg-timer-cancel` lets you choose a timer to cancel

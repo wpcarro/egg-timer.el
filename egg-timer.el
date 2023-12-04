@@ -191,8 +191,12 @@ alist of events each of (label id)."
   "Accepts a string in the format of \"<unit> <measure>\" where the unit
 should be an integer and the measure should be from 'timer-duration-words', it will also accept these words pluralised with an s on the end and remove it.
 
-Returns a cons cell of (<unit> . <measure>) or nil in the event
-of bad formatting"
+Returns a list of '(<unit> <measure> <additional-commentary>)
+or nil in the event of bad formatting.
+
+Anything after a detected measure is deemed a part of
+additional-commentary and added to the label of the timer so its
+clear what the timer is for."
   (cond
 
    ;; Just get an int? Assume minutes
@@ -203,15 +207,18 @@ of bad formatting"
    ;; to drop s from the end of strings because none of the
    ;; timer-duration-words has it by default.  This is a dangerous
    ;; assumption based on English named units.
-   ((if (string-match "^\\([[:digit:]]+\\)[[:space:]]+\\([[:graph:]]+?\\)s??$"
+   ((if (string-match "^\\([[:digit:]]+\\)[[:space:]]+\\([[:graph:]]+?\\)s??\\([[:space:]]+.+\\)??$"
                       timedesc)
         (let* ((unit (string-to-number (match-string 1 timedesc)))
                (measure (match-string 2 timedesc))
+               (commentary (if (match-string 3 timedesc)
+                               (string-trim-whitespace (match-string 3 timedesc))
+                             nil))
                (exists (assoc measure timer-duration-words)))
-          (format "got '%s' '%s'" unit measure)
+          (message "got '%s' '%s' '%s'" unit measure commentary)
           (if (and (not (equal unit nil))
                    (not (equal exists nil)))
-              (cons unit measure)))))
+              (list unit measure commentary)))))
     
    ;; Otherwise try and extract a number from whatever we get and assume its
    ;; minutes
@@ -221,7 +228,7 @@ of bad formatting"
       (let ((num (string-to-number timedesc)))
         (if num
             (cl-return-from egg-timer--timedesc-checker
-              (cons num "minute"))))))
+              (list num "minute" nil))))))
 
    ;; Unsure?  Return nil
    t nil))
@@ -297,12 +304,20 @@ Provide LABEL to change the notifications, which defaults to \"TIMEDESC\"
 with the correct amount of units on the end."
   ;; (interactive)
   (let ((timer-details (egg-timer--timedesc-checker timedesc)))
-    (when (not (equal timer-details nil))
-      (let* ((units (car timer-details))
-             (measure (cdr timer-details))
-             (actual-label (if (not (equal label nil))
-                               label
-                             (format "%i %s" units measure))))
+    (when (and (not (equal timer-details nil))
+               (= (length timer-details) 3))
+      (let* ((units (nth 0 timer-details))
+             (measure (nth 1 timer-details))
+             (additional (nth 2 timer-details))
+             (time-spec (format "%i %s" units measure))
+             (actual-label
+              (cond ((not (equal label nil))
+                     label)
+                    (additional
+                     (format "%i %s %s" units measure additional))
+                    (t (format "%i %s" units measure)))))
+
+        ;; (message "%s / %s / %s" units measure actual-label) 
 
         ;; Set the timer creating an egg-timer-event struct and
         ;; pushing it onto the egg-timer-running-timers list.
@@ -311,7 +326,7 @@ with the correct amount of units on the end."
                                   (format-time-string "%s" (current-time))
                                   (recent-keys))))
                (event (run-at-time
-                       actual-label ;; When do we run
+                       time-spec ;; When do we run
                        nil          ;; No repeat
 
                        ;; Pass the ID so it can find the label and remove it
