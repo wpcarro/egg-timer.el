@@ -1,5 +1,25 @@
 # egg-timer.el
 
+## Introduction to the fork
+
+This is a fork of the excellent and original egg-timer.el because I really liked the simplicity of the interface here but I wanted to be able to free form enter text for choosing a timer's time as well as select from a list with completion, also I wanted to make it work on systems where I didn't have access to DBUS notifications (remote terminal machines, windows machines, etc) so I wanted to
+make the notification system more customisable if I wanted too, and then I wanted the ability to list/modify the timers running... so I sort of took the original incredibly simple and beautiful code and mangled it with complexity.
+
+But the users experience of it should remain very simple.
+
+This version exposes four functions to the user:
+
+* `egg-timer-schedule` lets you schedule a timer either from a completing read or entering any time string that looks right enough according to `timer-duration-words` so writing "3 seconds" or "3 hours" would give you a timer for "3 second" or "3 hour" because it trims off -s and things.
+* `egg-timer-p` tells you if you have running timers
+* `egg-timer-list` lists your running timers
+* `egg-timer-cancel` lets you choose a timer to cancel
+
+There is also a variable `egg-timer-notification-method` that lets you choose now notifications work, by default it uses `notifications-notify` but it can be set to `'buffer` to pop up  buffer showing when the timer completes or `'message` to just display a message.  If it is linked to a function then it will call that function and pass it the label of the timer to display, this can be either a lambda or a #'my-function 
+
+Everything below here is the original documentation
+
+---
+
 [![MELPA](https://melpa.org/packages/egg-timer-badge.svg)](https://melpa.org/#/egg-timer)
 Use Emacs to set timers.
 
